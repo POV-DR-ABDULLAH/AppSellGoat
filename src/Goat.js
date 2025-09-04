@@ -1,0 +1,75 @@
+import Kambing from "./assets/dummy.jpg"
+import Susu from "./assets/Milk.png"
+
+// Goat.js
+export const Goat = [
+    {
+      id: 1,
+      food_name: "Kambing Guling",
+      food_category: "goat_main",
+      food_quantity: 1,
+      food_img: Kambing,
+      price: 150000,
+    },
+    {
+      id: 2,
+      food_name: "Sate Kambing",
+      food_category: "goat_main",
+      food_quantity: 1,
+      food_img: Kambing,
+      price: 40000,
+    },
+    {
+      id: 3,
+      food_name: "Gulai Kambing",
+      food_category: "goat_main",
+      food_quantity: 1,
+      food_img: Kambing,
+      price: 35000,
+    },
+    {
+      id: 4,
+      food_name: "Tongseng Kambing",
+      food_category: "goat_main",
+      food_quantity: 1,
+      food_img: Kambing,
+      price: 35000,
+    },
+  ];
+  
+  // Milk.js
+export const Milk = [
+    {
+      id: 1,
+      food_name: "Susu Murni Segar",
+      food_category: "fresh_milk",
+      food_quantity: 1,
+      food_img: Susu,
+      price: 15000,
+    },
+    {
+      id: 2,
+      food_name: "Yogurt Plain",
+      food_category: "milk_processed",
+      food_quantity: 1,
+      food_img: Susu,
+      price: 20000,
+    },
+    {
+      id: 3,
+      food_name: "Keju Kambing",
+      food_category: "milk_processed",
+      food_quantity: 1,
+      food_img: Susu,
+      price: 25000,
+    },
+    {
+      id: 4,
+      food_name: "Susu Bubuk Kambing",
+      food_category: "milk_powder",
+      food_quantity: 1,
+      food_img: Susu,
+      price: 30000,
+    },
+  ];
+  

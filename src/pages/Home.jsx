@@ -1,0 +1,195 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import GoatImage from '../assets/Goat.png';
+import dummy from '../assets/kambing1.jpg';
+import GoatMilkImage from '../assets/GoatMilk.jpg';
+
+const Home = () => {
+  return (
+    <div className='bg-gray-50'>
+      {/* Hero Section */}
+      <section id="home" className='min-h-screen flex items-center justify-center bg-green-50 px-4 py-16'>
+        <div className='container mx-auto px-4'>
+          <div className='flex flex-col items-center justify-center text-center'>
+            <div className='mb-10 max-w-4xl'>
+              <img 
+                src={GoatImage} 
+                alt='Kambing Sehat' 
+                className='mx-auto mb-8 w-64 h-64 object-cover rounded-full border-4 border-white shadow-lg'
+              />
+              <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight'>
+                Jual Kambing & Susu Segar<br />
+                <span className='text-green-600'>Langsung dari Peternakan</span>
+              </h1>
+              <p className='text-xl text-gray-600 mb-10 max-w-2xl mx-auto'>
+                Kualitas terbaik, sehat, dan terjamin halal untuk kebutuhan Anda.
+              </p>
+              <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
+                <Link 
+                  to='/kambing' 
+                  className='w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
+                >
+                  Lihat Katalog Kambing
+                </Link>
+                <Link 
+                  to='/susu' 
+                  className='w-full sm:w-auto bg-white hover:bg-gray-50 text-green-600 border-2 border-green-600 font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
+                >
+                  Pesan Susu Segar
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Goat Section */}
+      <section id="kambing" className='min-h-screen flex items-center py-20 bg-white'>
+        <div className='container mx-auto px-6'>
+          <div className='text-center mb-16'>
+            <h2 className='text-4xl font-bold text-gray-800 mb-4'>🐐 Tentang Kambing Kami</h2>
+            <div className='w-24 h-1 bg-green-500 mx-auto'></div>
+          </div>
+          
+          <div className='flex flex-col lg:flex-row items-center gap-12'>
+            <div className='lg:w-1/2'>
+              <img 
+                src={dummy} 
+                alt='Kambing Sehat' 
+                className='rounded-xl shadow-xl w-full max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+              />
+            </div>
+            <div className='lg:w-1/2 mt-12 lg:mt-0'>
+              <h3 className='text-3xl font-bold text-gray-800 mb-6'>Kambing Sehat & Berkualitas</h3>
+              <p className='text-lg text-gray-600 mb-8 leading-relaxed'>
+                Kami menyediakan berbagai jenis kambing sehat dan terawat dengan baik untuk berbagai keperluan. Setiap kambing dipelihara dengan standar kebersihan dan kesehatan yang tinggi.
+              </p>
+              <ul className='space-y-4 mb-10'>
+                {[
+                  'Kambing Aqiqah',
+                  'Kambing Qurban',
+                  'Kambing Konsumsi Harian'
+                ].map((item, index) => (
+                  <li key={index} className='flex items-start'>
+                    <span className='text-green-500 text-xl mr-3 mt-1'>✓</span>
+                    <span className='text-gray-700 text-lg'>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link 
+                to='/kambing' 
+                className='inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105'
+              >
+                Lihat Harga & Pemesanan
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Milk Section */}
+      <section id="susu" className='min-h-screen flex items-center py-20 bg-gray-50'>
+        <div className='container mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <h2 className='text-4xl font-bold text-gray-800 mb-4'>🥛 Susu Kambing Segar</h2>
+            <div className='w-24 h-1 bg-green-500 mx-auto'></div>
+          </div>
+          
+          <div className='flex flex-col lg:flex-row-reverse items-center gap-12'>
+            <div className='lg:w-1/2'>
+              <img 
+                src={GoatMilkImage} 
+                alt='Susu Kambing Segar' 
+                className='rounded-xl shadow-xl w-full max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+              />
+            </div>
+            <div className='lg:w-1/2 mt-12 lg:mt-0'>
+              <h3 className='text-3xl font-bold text-gray-800 mb-6'>Susu Kambing Murni & Berkhasiat</h3>
+              <p className='text-lg text-gray-600 mb-8 leading-relaxed'>
+                Nikmati manfaat susu kambing segar yang diproses dengan higienis tanpa bahan pengawet. Susu kami diproses dengan standar kebersihan tinggi untuk menjaga kualitas dan nutrisinya.
+              </p>
+              <ul className='space-y-4 mb-10'>
+                {[
+                  'Diperah langsung setiap pagi',
+                  'Tanpa bahan pengawet',
+                  'Kaya nutrisi dan gizi',
+                  'Dikemas dengan baik dan higienis'
+                ].map((item, index) => (
+                  <li key={index} className='flex items-start'>
+                    <span className='text-green-500 text-xl mr-3 mt-1'>✓</span>
+                    <span className='text-gray-700 text-lg'>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link 
+                to='/susu' 
+                className='inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105'
+              >
+                Pesan Sekarang
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section id="ulasan" className='py-20 bg-white'>
+        <div className='container mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <h2 className='text-4xl font-bold text-gray-800 mb-4'>✅ Kenapa Harus Beli di Sini?</h2>
+            <div className='w-24 h-1 bg-green-500 mx-auto mb-12'></div>
+            <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
+              Kami memberikan pelayanan terbaik dengan kualitas produk yang tidak perlu diragukan lagi.
+            </p>
+          </div>
+          
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {[
+              {
+                icon: '🐐',
+                title: 'Hewan Sehat',
+                description: 'Kambing kami dipelihara dengan baik dan bebas penyakit'
+              },
+              {
+                icon: '🥛',
+                title: '100% Murni',
+                description: 'Susu segar tanpa campuran bahan pengawet'
+              },
+              {
+                icon: '💰',
+                title: 'Harga Bersaing',
+                description: 'Harga terjangkau dengan kualitas terjamin'
+              },
+              {
+                icon: '🚚',
+                title: 'Layanan Antar',
+                description: 'Gratis ongkir untuk area tertentu'
+              },
+              {
+                icon: '📱',
+                title: 'Praktis',
+                description: 'Bisa pesan online kapan saja'
+              },
+              {
+                icon: '🔄',
+                title: 'Garansi',
+                description: 'Garansi kepuasan pelanggan'
+              }
+            ].map((feature, index) => (
+              <div 
+                key={index} 
+                className='bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 hover:border-green-100 transform hover:-translate-y-1'
+              >
+                <div className='text-5xl mb-6'>{feature.icon}</div>
+                <h3 className='text-xl font-bold text-gray-800 mb-3'>{feature.title}</h3>
+                <p className='text-gray-600'>{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Home;
