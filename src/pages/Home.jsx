@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import GoatImage from '../assets/Goat.png';
-import dummy from '../assets/kambing1.jpg';
+import dummy from '../assets/Kambing1.jpg';
 import GoatMilkImage from '../assets/GoatMilk.jpg';
 
 const Home = () => {
@@ -15,21 +15,22 @@ const Home = () => {
               <img 
                 src={GoatImage} 
                 alt='Kambing Sehat' 
-                className='mx-auto mb-8 w-64 h-64 object-cover rounded-full border-4 border-white shadow-lg'
+                className='mx-auto mb-8 w-[200px] h-[200px] object-cover rounded-full border-4 border-white shadow-lg'
               />
               <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight'>
-                Jual Kambing & Susu Segar<br />
-                <span className='text-green-600'>Langsung dari Peternakan</span>
+                Aqiqah & Susu Segar <br />
+                di <span className='text-green-600'>Aqiqah Mas Ali</span>
               </h1>
               <p className='text-xl text-gray-600 mb-10 max-w-2xl mx-auto'>
-                Kualitas terbaik, sehat, dan terjamin halal untuk kebutuhan Anda.
+                Layanan aqiqah terpercaya & susu murni segar yang sehat, higienis, 
+                dan 100% halal. Dibawa langsung oleh <span className='font-semibold text-gray-800'>Mas Ali</span> untuk keluarga Anda.
               </p>
               <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
                 <Link 
                   to='/kambing' 
                   className='w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
                 >
-                  Lihat Katalog Kambing
+                  Lihat Kambing
                 </Link>
                 <Link 
                   to='/susu' 
