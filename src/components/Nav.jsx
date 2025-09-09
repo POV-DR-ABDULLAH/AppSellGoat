@@ -3,7 +3,7 @@ import { IoFastFoodOutline } from "react-icons/io5";
 import { FaShoppingBasket } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { dataContext } from '../context/userContext';
-import { Goat } from '../Goat';
+import { Goat } from '../Data';
 import { useSelector } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 import Goatt from '../assets/Kambing.jpg';
@@ -20,6 +20,7 @@ function Nav() {
 
     // Cek apakah sedang di halaman Kambing atau Susu
     const showNavBar = location.pathname === '/kambing' || location.pathname === '/susu';
+    const showNavBar3 = location.pathname === '/kambing' || location.pathname === '/susu' || location.pathname === '/';
     const showNavBar2 = location.pathname === '/';
 
     useEffect(() => {
@@ -38,13 +39,15 @@ function Nav() {
             <div className="w-full flex justify-between items-center px-5 md:px-8 h-[80px]">
                 
                 {/* Logo + Tulisan */}
-                <div className="flex items-center gap-3">
+                
+                <Link to="/" className="flex items-center gap-3">
                     <img src={Kambingg} className='w-[50px] h-[50px] text-gray-300' />
-                    <h1 className="text-xl font-semibold text-gray-600">Jual Kambing</h1>
-                </div>
+                    <h1 className="text-xl font-semibold text-gray-600">JK</h1>
+                </Link>
 
                 {/* Menu */}
                 <div className={`hidden md:flex flex-col items-center gap-2 flex-1 ${showNavBar ? 'pt-12' : 'pt-16'}`}>
+                {showNavBar3 && (
                     <div className="flex flex-wrap justify-center items-center gap-5 w-full">
                         {Categories.map((item) => (
                             <Link 
@@ -57,7 +60,7 @@ function Nav() {
                             </Link>
                         ))}
                     </div>
-            
+                )}
                     {showNavBar && (
                         <div className='flex flex-wrap justify-center items-center gap-5 w-full  rounded-lg'>
                             {location.pathname === '/kambing' && (
@@ -127,17 +130,19 @@ function Nav() {
                 </div>
 
                 {/* Tombol Login */}
-                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                Login
-                </button>
+                {showNavBar3 && (
+                <Link to="/login" className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                    Login
+                </Link>
+                )}
             </div>
         </div>
         {showNavBar && (
             <div className={`w-full flex justify-between items-center px-5 md:px-8 fixed transition-all duration-300 shadow-md ${isScrolled ? "pt-30" : "pt-35"}`}>
                 {/* Logo */}
-                <div className='w-[60px] h-[60px] flex justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300'>
+                <Link to="/about" className='w-[60px] h-[60px] flex justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300'>
                     <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' />
-                </div>
+                </Link>
 
                 {/* Search */}
                 <form

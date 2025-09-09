@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import GoatImage from '../assets/Goat.png';
 import dummy from '../assets/Kambing1.jpg';
 import GoatMilkImage from '../assets/GoatMilk.jpg';
+import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -17,13 +18,14 @@ const Home = () => {
                 alt='Kambing Sehat' 
                 className='mx-auto mb-8 w-[200px] h-[200px] object-cover rounded-full border-4 border-white shadow-lg'
               />
-              <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight'>
-                Aqiqah & Susu Segar <br />
+              <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 leading-tight'>
+                Jual Kambing
+                Aqiqah <br /> & Susu Segar <br />
                 di <span className='text-green-600'>Aqiqah Mas Ali</span>
               </h1>
               <p className='text-xl text-gray-600 mb-10 max-w-2xl mx-auto'>
-                Layanan aqiqah terpercaya & susu murni segar yang sehat, higienis, 
-                dan 100% halal. Dibawa langsung oleh <span className='font-semibold text-gray-800'>Mas Ali</span> untuk keluarga Anda.
+                Layanan aqiqah, penjualan kambing & susu murni segar yang sehat, higienis, 
+                dan 100% halal terpercaya. oleh <span className='font-semibold text-gray-800'>Mas Ali</span>
               </p>
               <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
                 <Link 
@@ -57,7 +59,7 @@ const Home = () => {
               <img 
                 src={dummy} 
                 alt='Kambing Sehat' 
-                className='rounded-xl shadow-xl w-full max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+                className='rounded-xl shadow-xl w-[500px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
               />
             </div>
             <div className='lg:w-1/2 mt-12 lg:mt-0'>
@@ -101,7 +103,7 @@ const Home = () => {
               <img 
                 src={GoatMilkImage} 
                 alt='Susu Kambing Segar' 
-                className='rounded-xl shadow-xl w-full max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+                className='rounded-xl shadow-xl w-[400px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
               />
             </div>
             <div className='lg:w-1/2 mt-12 lg:mt-0'>
@@ -189,6 +191,31 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* Floating Contacts */}
+      <div className="fixed right-6 bottom-6 z-[1000] flex flex-col items-end gap-3">
+        <a
+          href="https://wa.me/6285241180699?text=Assalamu'alaikum%2C%20saya%20ingin%20tanya%20tentang%20aqiqah%20%2F%20susu."
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center gap-2 px-4 py-3 rounded-full shadow-xl bg-green-500 text-white hover:bg-green-600 transition-colors"
+          title="Hubungi WhatsApp"
+          aria-label="Hubungi WhatsApp"
+        >
+          <span className="text-lg">💬</span>
+          <span className="hidden sm:block font-medium">WhatsApp</span>
+        </a>
+        <Link
+          to="/about"
+          className="group flex items-center gap-2 px-4 py-3 rounded-full shadow-xl bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+          title="Tentang Kami"
+          aria-label="Tentang Kami"
+        >
+          <span className="text-lg">ℹ️</span>
+          <span className="hidden sm:block font-medium">Tentang Kami</span>
+        </Link>
+      </div>
+
+      <Footer />
     </div>
   );
 };

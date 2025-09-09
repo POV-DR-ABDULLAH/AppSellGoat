@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Goat, Milk } from '../Goat'
+import { Goat, Milk } from '../Data'
 
 export const dataContext = createContext()
 
