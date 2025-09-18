@@ -59,7 +59,7 @@ const Home = () => {
               <img 
                 src={dummy} 
                 alt='Kambing Sehat' 
-                className='rounded-xl shadow-xl w-[500px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+                className='rounded-xl shadow-xl w-[400px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
               />
             </div>
             <div className='lg:w-1/2 mt-12 lg:mt-0'>
@@ -192,7 +192,7 @@ const Home = () => {
         </div>
       </section>
       {/* Floating Contacts */}
-      <div className="fixed right-6 bottom-6 z-[1000] flex flex-col items-end gap-3">
+      <div className="fixed right-6 bottom-6 z-[10] flex flex-col items-end gap-3">
         <a
           href="https://wa.me/6285241180699?text=Assalamu'alaikum%2C%20saya%20ingin%20tanya%20tentang%20aqiqah%20%2F%20susu."
           target="_blank"

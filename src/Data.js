@@ -29,7 +29,7 @@ export const Goat = [
     },
     {
       id: 4,
-      food_name: "Tongseng Kambing",
+      food_name: "Kambing Tongseng",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -37,7 +37,7 @@ export const Goat = [
     },
     {
       id: 1,
-      food_name: "Kambing Guling",
+      food_name: "Kambing Kecil",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -45,7 +45,7 @@ export const Goat = [
     },
     {
       id: 2,
-      food_name: "Sate Kambing",
+      food_name: "Kambing",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -53,7 +53,7 @@ export const Goat = [
     },
     {
       id: 3,
-      food_name: "Gulai Kambing",
+      food_name: "Kambing Soto",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -61,7 +61,7 @@ export const Goat = [
     },
     {
       id: 4,
-      food_name: "Tongseng Kambing",
+      food_name: "Kambing Kari",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -69,7 +69,7 @@ export const Goat = [
     },
     {
       id: 3,
-      food_name: "Gulai Kambing",
+      food_name: "Kambing Potong",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -77,7 +77,7 @@ export const Goat = [
     },
     {
       id: 4,
-      food_name: "Tongseng Kambing",
+      food_name: "Kambing Hidup",
       food_category: "goat_main",
       food_quantity: 1,
       food_img: Kambing,
@@ -121,7 +121,7 @@ export const Milk = [
     },
     {
       id: 1,
-      food_name: "Susu Murni Segar",
+      food_name: "Susu Beku",
       food_category: "fresh_milk",
       food_quantity: 1,
       food_img: Susu,

@@ -9,9 +9,9 @@ function Card({name, img, id, price, type}) {
     let dispatch = useDispatch()
 
   return (
-    <div className="w-[250px] h-[400] bg-white p-3 rouned-lg flex flex-col gap-3 shadow-lg hover:border-2 border-blue-300">
-        <div className="w-[100%] h-[60%] overflow-hidden rounded-lg">
-            <img src={img} alt="" className="object-cover" />
+    <div className="w-full bg-blue p-3 rounded-lg flex flex-col gap-3 shadow-lg hover:border-2 border-blue-300">
+        <div className="w-full overflow-hidden rounded-lg aspect-[4/3]">
+            <img src={img} alt="" className="w-full h-full object-cover" />
         </div>
 
         <div className="text-2xl font-semibold">

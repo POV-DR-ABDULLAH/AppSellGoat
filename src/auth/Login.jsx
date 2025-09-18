@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { supabase } from "../lib/supabaseClient"
 
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -11,6 +12,8 @@ const LoginForm = () => {
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [authError, setAuthError] = useState("")
+  const [resetInfo, setResetInfo] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -25,6 +28,8 @@ const LoginForm = () => {
         [name]: "",
       }))
     }
+    if (authError) setAuthError("")
+    if (resetInfo) setResetInfo("")
   }
 
   const validateForm = () => {
@@ -55,12 +60,50 @@ const LoginForm = () => {
     }
 
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Login attempt:", formData)
+    setAuthError("")
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })
+      if (error) {
+        setAuthError(error.message)
+        return
+      }
+      if (data?.session) {
+        navigate("/")
+      }
+    } catch (err) {
+      setAuthError("Unexpected error. Please try again.")
+    } finally {
       setIsLoading(false)
-      // Handle successful login here
-    }, 1000)
+    }
+  }
+
+  const handleResetPassword = async () => {
+    // Require a valid email to send reset link
+    if (!formData.email) {
+      setErrors((prev) => ({ ...prev, email: "Please enter your email first" }))
+      return
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrors((prev) => ({ ...prev, email: "Email is invalid" }))
+      return
+    }
+    setAuthError("")
+    setResetInfo("")
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
+        redirectTo: `${window.location.origin}/login`,
+      })
+      if (error) {
+        setAuthError(error.message)
+        return
+      }
+      setResetInfo("Password reset email sent. Please check your inbox.")
+    } catch (err) {
+      setAuthError("Unable to send reset email. Please try again.")
+    }
   }
 
   return (
@@ -123,9 +166,20 @@ const LoginForm = () => {
               {errors.password && <p className="mt-1 text-sm text-destructive">{errors.password}</p>}
             </div>
 
+            {authError && (
+              <div className="text-sm text-destructive bg-white border border-destructive/30 rounded p-2">
+                {authError}
+              </div>
+            )}
+            {resetInfo && (
+              <div className="text-sm text-green-700 bg-white border border-green-300 rounded p-2">
+                {resetInfo}
+              </div>
+            )}
+
             {/* Forgot Password Link */}
             <div className="text-right">
-              <button type="button" className="text-sm text-secondary hover:text-secondary/80 transition-colors">
+              <button type="button" onClick={handleResetPassword} className="text-sm text-secondary hover:text-secondary/80 transition-colors">
                 Forgot your password?
               </button>
             </div>

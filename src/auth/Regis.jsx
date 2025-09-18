@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { supabase } from "../lib/supabaseClient"
+import { FiEye, FiEyeOff } from "react-icons/fi"
 
 const RegisterForm = () => {
   const navigate = useNavigate()
@@ -13,6 +15,10 @@ const RegisterForm = () => {
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [authError, setAuthError] = useState("")
+  const [infoMsg, setInfoMsg] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,6 +33,8 @@ const RegisterForm = () => {
         [name]: "",
       }))
     }
+    if (authError) setAuthError("")
+    if (infoMsg) setInfoMsg("")
   }
 
   const validateForm = () => {
@@ -69,12 +77,28 @@ const RegisterForm = () => {
     }
 
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
+    setAuthError("")
+    setInfoMsg("")
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: { full_name: formData.name },
+          emailRedirectTo: `${window.location.origin}/login`,
+        },
+      })
+      if (error) {
+        setAuthError(error.message)
+        return
+      }
+      // Apapun pengaturan email confirmation, arahkan ke halaman login
+      navigate('/login', { replace: true })
+    } catch (err) {
+      setAuthError("Unexpected error. Please try again.")
+    } finally {
       setIsLoading(false)
-      alert("Registration successful! You can now login.")
-      navigate('/login')
-    }, 1000)
+    }
   }
 
   return (
@@ -132,17 +156,27 @@ const RegisterForm = () => {
               <label htmlFor="password" className="block text-sm font-medium text-card-foreground mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-input border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors ${
-                  errors.password ? "border-destructive" : "border-border"
-                }`}
-                placeholder="Create a password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 pr-10 bg-input border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors ${
+                    errors.password ? "border-destructive" : "border-border"
+                  }`}
+                  placeholder="Create a password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
               {errors.password && <p className="mt-1 text-sm text-destructive">{errors.password}</p>}
             </div>
 
@@ -151,19 +185,40 @@ const RegisterForm = () => {
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-card-foreground mb-2">
                 Confirm Password
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 bg-input border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors ${
-                  errors.confirmPassword ? "border-destructive" : "border-border"
-                }`}
-                placeholder="Confirm your password"
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 pr-10 bg-input border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors ${
+                    errors.confirmPassword ? "border-destructive" : "border-border"
+                  }`}
+                  placeholder="Confirm your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
               {errors.confirmPassword && <p className="mt-1 text-sm text-destructive">{errors.confirmPassword}</p>}
             </div>
+
+            {authError && (
+              <div className="text-sm text-destructive bg-white border border-destructive/30 rounded p-2">
+                {authError}
+              </div>
+            )}
+            {infoMsg && (
+              <div className="text-sm text-green-700 bg-white border border-green-300 rounded p-2">
+                {infoMsg}
+              </div>
+            )}
 
             {/* Submit Button */}
             <button
@@ -190,7 +245,7 @@ const RegisterForm = () => {
                     <path
                       className="opacity-75"
                       fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
                   Creating account...

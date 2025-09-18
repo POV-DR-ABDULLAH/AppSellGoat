@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Categories from '../Category'
 import Card from '../components/Card'
 import Card2 from '../components/CardDua'
@@ -7,8 +7,11 @@ import { Goat } from '../Data'
 import { dataContext } from '../context/userContext'
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from 'react-redux'
+import { supabase } from '../lib/supabaseClient'
+
 function Kambing() {
     let {cate, setCate, input, showCart, setShowCart} = useContext(dataContext)
+    const navigate = useNavigate();
 
     function filter(category) {
         if(category === "semua") {
@@ -26,17 +29,29 @@ function Kambing() {
     let taxes = subtotal * 0.5/100;
     let total = Math.floor(subtotal + deliferyFee + taxes)
 
-    // Filter berdasarkan input pencarian
+    // Filter: pencarian hanya berdasarkan nama menu
     const query = input.trim().toLowerCase();
-    const filteredCate = query
-        ? cate.filter((item) => item.food_name.toLowerCase().includes(query))
-        : cate;
+    const baseList = Goat;
+    const filteredList = query
+        ? baseList.filter((item) => item.food_name.toLowerCase().includes(query))
+        : baseList;
+
+    // Handler tombol pesan: arahkan ke login jika belum login
+    const handlePesan = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            navigate('/login');
+            return;
+        }
+        // Jika sudah login, lanjutkan proses pemesanan (placeholder)
+        // TODO: arahkan ke halaman checkout jika sudah tersedia
+    }
 
   return (
-    <div className='bg-slate-200 w-full min-h-screen'>
-        <div className="w-full flex flex-wrap gap-5 px-5 justify-center items-center pt-8 pb-8">
-            {filteredCate.length > 0 ? (
-                filteredCate.map((item) => (
+    <div className='bg-slate-200 w-full min-h-screen pt-[80px]'>
+        <div className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5 justify-items-center pt-2 pb-8">
+            {filteredList.length > 0 ? (
+                filteredList.map((item) => (
                     <Card 
                         key={`goat-${item.id}`}
                         name={item.food_name} 
@@ -48,7 +63,7 @@ function Kambing() {
                 ))
             ) : (
                 <div className="text-center text-2xl text-blue-300 font-semibold pt-5">
-                    Tidak ada hasil untuk pencarian
+                    Tidak ada di menu
                 </div>
             )}
 
@@ -86,14 +101,14 @@ function Kambing() {
                     <span className='text-lg text-gray-600 font-semibold'>Total</span>
                     <span className='text-blue-300 font-semibold text-lg text-2xl'>Rp {total}</span>
                 </div>
-                <button className='w-full p-3 rounded-lg bg-blue-300 text-gray-700 hover:bg-blue-100 transition-all cursor-pointer'>pesan</button>
+                <button onClick={handlePesan} className='w-full p-3 rounded-lg bg-blue-300 text-gray-700 hover:bg-blue-100 transition-all cursor-pointer'>pesan</button>
             </> : <div className="text-center text-2xl text-blue-300 font-semibold pt-5">Empty Cart</div>
             }
 
         </div>
 
         {/* Floating Contacts */}
-        <div className="fixed right-6 bottom-6 z-[1000] flex flex-col items-end gap-3">
+        <div className="fixed right-6 bottom-6 z-[100] flex flex-col items-end gap-3">
           <a
             href="https://wa.me/6285241180699?text=Assalamu'alaikum%2C%20saya%20ingin%20tanya%20tentang%20aqiqah%20%2F%20susu."
             target="_blank"
