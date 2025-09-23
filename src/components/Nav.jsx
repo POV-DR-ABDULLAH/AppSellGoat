@@ -44,6 +44,23 @@ function Nav() {
         return () => window.removeEventListener("scroll", handleScroll);
       }, []);
 
+    // Lock scroll and close on Escape when mobile menu open
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') setIsMenuOpen(false);
+        };
+        if (isMenuOpen) {
+            document.addEventListener('keydown', onKeyDown);
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+        return () => {
+            document.removeEventListener('keydown', onKeyDown);
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [isMenuOpen]);
+
     const handleLogout = async () => {
         await supabase.auth.signOut();
         setIsUserMenuOpen(false);
@@ -265,12 +282,19 @@ function Nav() {
                 {/* Hamburger for mobile */}
                 <button
                   type="button"
-                  className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-200"
+                  className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-200 transition-colors"
                   aria-label="Toggle navigation menu"
+                  aria-expanded={isMenuOpen}
                   onClick={() => setIsMenuOpen(prev => !prev)}
                 >
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <svg className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {isMenuOpen ? (
+                      // Icon: X
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      // Icon: Hamburger
+                      <path strokeLinecap="round"  strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                    )}
                   </svg>
                 </button>
             </div>
@@ -303,9 +327,15 @@ function Nav() {
             </div>
         )}
 
-        {/* Mobile dropdown menu */}
-        {isMenuOpen && (
-          <div className="md:hidden fixed top-[70px] left-0 right-0 z-30 bg-gray-100 border-t border-gray-200 shadow-lg">
+        {/* Backdrop + Mobile dropdown menu with animations */}
+        {/* Backdrop closes the menu when clicking outside */}
+        <div
+          className={`md:hidden fixed top-[70px] left-0 right-0 bottom-0 z-20 bg-black/30 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          onClick={() => setIsMenuOpen(false)}
+        />
+
+        {/* Sliding panel */}
+        <div className={`md:hidden fixed top-[70px] left-0 right-0 z-30 bg-gray-100 border-t border-gray-200 shadow-lg transform transition-transform duration-300 ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="p-4 flex flex-col gap-3">
               {showNavBar3 && (
                 <div className="grid grid-cols-3 gap-1">
@@ -396,8 +426,7 @@ function Nav() {
                 )
               )}
             </div>
-          </div>
-        )}
+        </div>
     </div>
       )
 }

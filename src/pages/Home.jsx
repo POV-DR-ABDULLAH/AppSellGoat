@@ -59,7 +59,7 @@ const Home = () => {
               <img 
                 src={dummy} 
                 alt='Kambing Sehat' 
-                className='rounded-xl shadow-xl w-[400px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+                className='rounded-xl shadow-xl w-56 sm:w-72 md:w-80 lg:w-[400px] max-w-full h-auto mx-auto transform motion-safe:hover:scale-105 active:scale-105 transition-transform duration-500'
               />
             </div>
             <div className='lg:w-1/2 mt-12 lg:mt-0'>
@@ -103,7 +103,7 @@ const Home = () => {
               <img 
                 src={GoatMilkImage} 
                 alt='Susu Kambing Segar' 
-                className='rounded-xl shadow-xl w-[400px] max-w-2xl mx-auto transform hover:scale-105 transition-transform duration-500'
+                className='rounded-xl shadow-xl w-56 xs:w-64 sm:w-72 md:w-80 lg:w-[400px] max-w-full h-auto mx-auto transform motion-safe:hover:scale-105 active:scale-105 transition-transform duration-500'
               />
             </div>
             <div className='lg:w-1/2 mt-12 lg:mt-0'>

@@ -36,7 +36,7 @@ export const Goat = [
       price: 35000,
     },
     {
-      id: 1,
+      id: 5,
       food_name: "Kambing Kecil",
       food_category: "goat_main",
       food_quantity: 1,
@@ -44,7 +44,7 @@ export const Goat = [
       price: 150000,
     },
     {
-      id: 2,
+      id: 6,
       food_name: "Kambing",
       food_category: "goat_main",
       food_quantity: 1,
@@ -52,7 +52,7 @@ export const Goat = [
       price: 40000,
     },
     {
-      id: 3,
+      id: 7,
       food_name: "Kambing Soto",
       food_category: "goat_main",
       food_quantity: 1,
@@ -60,7 +60,7 @@ export const Goat = [
       price: 35000,
     },
     {
-      id: 4,
+      id: 8,
       food_name: "Kambing Kari",
       food_category: "goat_main",
       food_quantity: 1,
@@ -68,7 +68,7 @@ export const Goat = [
       price: 35000,
     },
     {
-      id: 3,
+      id: 9,
       food_name: "Kambing Potong",
       food_category: "goat_main",
       food_quantity: 1,
@@ -76,7 +76,7 @@ export const Goat = [
       price: 35000,
     },
     {
-      id: 4,
+      id: 10,
       food_name: "Kambing Hidup",
       food_category: "goat_main",
       food_quantity: 1,
@@ -96,7 +96,7 @@ export const Milk = [
       price: 15000,
     },
     {
-      id: 2,
+      id: 6,
       food_name: "Yogurt Plain",
       food_category: "milk_processed",
       food_quantity: 1,
@@ -104,7 +104,7 @@ export const Milk = [
       price: 20000,
     },
     {
-      id: 3,
+      id: 7,
       food_name: "susu dingin",
       food_category: "milk_processed",
       food_quantity: 1,
@@ -112,7 +112,7 @@ export const Milk = [
       price: 25000,
     },
     {
-      id: 4,
+      id: 8,
       food_name: "Susu Bubuk",
       food_category: "milk_powder",
       food_quantity: 1,
@@ -120,7 +120,7 @@ export const Milk = [
       price: 30000,
     },
     {
-      id: 1,
+      id: 5,
       food_name: "Susu Beku",
       food_category: "fresh_milk",
       food_quantity: 1,

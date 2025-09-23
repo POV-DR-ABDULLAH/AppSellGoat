@@ -4,6 +4,7 @@ import React from 'react'
 import { useDispatch } from "react-redux";
 import { AddItem } from "../redux/cartSlice";
 import { toast } from 'react-toastify';
+import { formatCurrencyIDR } from "../utils/format";
 
 function Card({name, img, id, price, type}) {
     let dispatch = useDispatch()
@@ -19,9 +20,10 @@ function Card({name, img, id, price, type}) {
         </div>
         
         <div className="w-full flex justify-between items-center">
-            <div className="text-lg font-bold text-blue-300">Rp {price}</div>
+            <div className="text-lg font-bold text-blue-300">{formatCurrencyIDR(price)}</div>
             <div className="flex justify-center items-center gap-2 text-blue-300 text-lg font-semibold">{type === "non_veg"?<GiChickenOven />:<LuLeafyGreen />}<span>{type}</span></div>
         </div>
+
             <button className="w-full p-3 rounded-lg bg-blue-300 text-gray-700 hover:bg-blue-100 transition-all cursor-pointer" onClick={() => {dispatch(AddItem({id:id, name:name, price:price, img:img, qty:1})); 
         toast("Barang Telah Di Tambahkan") }}>tambahkan ke keranjang</button>
     </div>

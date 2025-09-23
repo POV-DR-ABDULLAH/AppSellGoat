@@ -2,6 +2,7 @@ import React from 'react'
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch } from 'react-redux';
 import { DecrementQty, RemoveItem, IcrementQty} from '../redux/cartSlice';
+import { formatCurrencyIDR } from "../utils/format";
 
 function Card2({name, id, price, img, qty}) {
     let dispatch = useDispatch()
@@ -24,7 +25,7 @@ function Card2({name, id, price, img, qty}) {
         </div>
 
         <div className="flex flex-col justify-start items-end gap-6">
-            <span className="text-blue-300 text-xl font-semibold">Rp {price}</span>
+            <span className="text-blue-300 text-xl font-semibold">{formatCurrencyIDR(price)}</span>
             <RiDeleteBin6Line className='w-[30px] h-[30px] text-red-300 cursor-pointer' onClick={() => dispatch(RemoveItem(id))} />
         </div>
     </div>

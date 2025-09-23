@@ -4,23 +4,24 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#E2E8F0] h-[200px] pt-12 pb-6">
+    <footer className="bg-gray-200 pt-10 pb-6 text-gray-700">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Grid sections */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="col-span-1">
-            <h3 className="text-xl font-bold mb-4">Tentang Kami</h3>
-            <p className="mb-4">
+            <h3 className="text-lg md:text-xl font-bold mb-3">Tentang Kami</h3>
+            <p className="mb-4 text-sm md:text-base">
               AppSellGoat adalah platform jual beli kambing dan produk olahan susu kambing berkualitas tinggi.
             </p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className=" hover:text-gray-300">
+              <a href="#" className="hover:text-gray-900">
                 <FaFacebook size={24} />
               </a>
-              <a href="#" className=" hover:text-gray-300">
+              <a href="#" className="hover:text-gray-900">
                 <FaInstagram size={24} />
               </a>
-              <a href="#" className=" hover:text-gray-300">
+              <a href="#" className="hover:text-gray-900">
                 <FaWhatsapp size={24} />
               </a>
             </div>
@@ -28,19 +29,19 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="col-span-1">
-            <h3 className="text-xl font-bold mb-4">Tautan Cepat</h3>
-            <ul className="space-y-2">
-              <li><Link to="/" className="hover:">Beranda</Link></li>
-              <li><Link to="/kambing" className="hover:">Kambing</Link></li>
-              <li><Link to="/susu" className="hover:">Susu Kambing</Link></li>
-              <li><Link to="/about" className="hover:">Tentang Kami</Link></li>
+            <h3 className="text-lg md:text-xl font-bold mb-3">Tautan Cepat</h3>
+            <ul className="space-y-2 text-sm md:text-base">
+              <li><Link to="/" className="hover:underline">Beranda</Link></li>
+              <li><Link to="/kambing" className="hover:underline">Kambing</Link></li>
+              <li><Link to="/susu" className="hover:underline">Susu Kambing</Link></li>
+              <li><Link to="/about" className="hover:underline">Tentang Kami</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div className="col-span-1">
-            <h3 className="text-xl font-bold mb-4">Hubungi Kami</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg md:text-xl font-bold mb-3">Hubungi Kami</h3>
+            <ul className="space-y-3 text-sm md:text-base">
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mt-1 mr-3 flex-shrink-0" />
                 <span>Jl. Dg. Tata Lama, Mangasa, Kec. Somba Opu, Kabupaten Gowa, Sulawesi Selatan 90221</span>
@@ -58,23 +59,23 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div className="col-span-1">
-            <h3 className="text-xl font-bold mb-4">Berlangganan</h3>
-            <p className=" mb-4">Dapatkan informasi terbaru dan penawaran spesial dari kami.</p>
-            <div className="flex hover:rounded-lg border border-gray-600">
-              <input 
-                type="email" 
-                placeholder="Email Anda" 
-                className="px-4 py-2 w-full rounded-l-md text-gray-800 focus:outline-none"
+            <h3 className="text-lg md:text-xl font-bold mb-3">Berlangganan</h3>
+            <p className="mb-4 text-sm md:text-base">Dapatkan informasi terbaru dan penawaran spesial dari kami.</p>
+            <form className="flex items-stretch rounded-lg overflow-hidden border border-gray-400 bg-white max-w-md">
+              <input
+                type="email"
+                placeholder="Email Anda"
+                className="px-3 py-2 w-full text-gray-800 focus:outline-none"
               />
-              <button className="bg-gray-500 hover:bg-gray-600  px-4 ">
+              <button type="submit" className="bg-gray-700 hover:bg-gray-800 text-white px-4 text-sm md:text-base">
                 Kirim
               </button>
-            </div>
+            </form>
           </div>
         </div>
         
         {/* Copyright */}
-        <div className="border-t border-green-700 mt-8 pt-6 text-center text-gray-600">
+        <div className="border-t border-gray-400 mt-8 pt-6 text-center text-gray-600 text-sm">
           <p>&copy; {new Date().getFullYear()} AppSellGoat. Semua hak dilindungi.</p>
         </div>
       </div>
@@ -83,3 +84,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

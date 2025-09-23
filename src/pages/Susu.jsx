@@ -8,6 +8,7 @@ import { dataContext } from '../context/userContext'
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from 'react-redux'
 import { supabase } from '../lib/supabaseClient'
+import { formatCurrencyIDR } from '../utils/format'
 
 function Susu() {
     let {cate, setCate, input, showCart, setShowCart} = useContext(dataContext)
@@ -82,20 +83,20 @@ function Susu() {
             <div className="w-full border-t-2 border-gray-400 border-b-2 mt-7 flex flex-col gap-2 p-8">
                 <div className="w-full flex justify-between items-center">
                     <span className='text-lg text-gray-600 font-semibold'>Jumlah keseluruhan</span>
-                    <span className='text-blue-300 font-semibold text-lg'>Rp {subtotal}</span>
+                    <span className='text-blue-300 font-semibold text-lg'>{formatCurrencyIDR(subtotal)}</span>
                 </div>
                 <div className="w-full flex justify-between items-center">
                     <span className='text-lg text-gray-600 font-semibold'>Biaya Pengiriman</span>
-                    <span className='text-blue-300 font-semibold text-lg'>Rp {deliferyFee}</span>
+                    <span className='text-blue-300 font-semibold text-lg'>{formatCurrencyIDR(deliferyFee)}</span>
                 </div>
                 <div className="w-full flex justify-between items-center">
                     <span className='text-lg text-gray-600 font-semibold'>Pajak</span>
-                    <span className='text-blue-300 font-semibold text-lg'>Rp {taxes}</span>
+                    <span className='text-blue-300 font-semibold text-lg'>{formatCurrencyIDR(taxes)}</span>
                 </div>
             </div>
             <div className="w-full flex justify-between items-center p-8">
                 <span className='text-lg text-gray-600 font-semibold'>Total</span>
-                <span className='text-blue-300 font-semibold text-lg text-2xl'>Rp {total}</span>
+                <span className='text-blue-300 font-semibold text-lg text-2xl'>{formatCurrencyIDR(total)}</span>
             </div>
             <button onClick={handlePesan} className='w-full p-3 rounded-lg bg-blue-300 text-gray-700 hover:bg-blue-100 transition-all cursor-pointer'>pesan</button>
                 </> : <div className="text-center text-2xl text-blue-300 font-semibold pt-5">Empty Cart</div>

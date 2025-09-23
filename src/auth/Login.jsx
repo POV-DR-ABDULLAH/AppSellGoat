@@ -14,6 +14,7 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [authError, setAuthError] = useState("")
   const [resetInfo, setResetInfo] = useState("")
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -70,9 +71,7 @@ const LoginForm = () => {
         setAuthError(error.message)
         return
       }
-      if (data?.session) {
-        navigate("/")
-      }
+      if (data?.session) navigate("/")
     } catch (err) {
       setAuthError("Unexpected error. Please try again.")
     } finally {
@@ -147,7 +146,6 @@ const LoginForm = () => {
               {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email}</p>}
             </div>
 
-            {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-card-foreground mb-2">
                 Password
@@ -176,6 +174,7 @@ const LoginForm = () => {
                 {resetInfo}
               </div>
             )}
+            
 
             {/* Forgot Password Link */}
             <div className="text-right">
@@ -215,9 +214,10 @@ const LoginForm = () => {
                   Signing in...
                 </div>
               ) : (
-                "Sign In"
+                'Sign In'
               )}
             </button>
+            
           </form>
 
           {/* Footer */}

@@ -92,7 +92,7 @@ const RegisterForm = () => {
         setAuthError(error.message)
         return
       }
-      // Apapun pengaturan email confirmation, arahkan ke halaman login
+      // Arahkan ke halaman login tanpa pesan verifikasi (verifikasi dinonaktifkan)
       navigate('/login', { replace: true })
     } catch (err) {
       setAuthError("Unexpected error. Please try again.")
