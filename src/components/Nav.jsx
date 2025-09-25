@@ -25,6 +25,7 @@ function Nav() {
     const userMenuRef = useRef(null);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false); // accordion inside mobile menu
     const [isSearchOpen, setIsSearchOpen] = useState(false); // toggle for slide-down search on kambing & susu
+  const searchRef = useRef(null); // ref untuk menangani klik di luar
     const [user, setUser] = useState(null);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -98,7 +99,7 @@ function Nav() {
         }
     }
 
-    // Close desktop dropdown when clicking outside
+    // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (navDropdownRef.current && !navDropdownRef.current.contains(e.target)) {
@@ -107,10 +108,19 @@ function Nav() {
             if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
                 setIsUserMenuOpen(false);
             }
+            // Hapus penutupan otomatis untuk search box di desktop
+            if (isSearchOpen && window.innerWidth < 768) {
+                if (searchRef.current && !searchRef.current.contains(e.target)) {
+                    setIsSearchOpen(false);
+                }
+            }
         };
+        
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isSearchOpen]);
 
     // Supabase auth state
     useEffect(() => {
@@ -133,14 +143,14 @@ function Nav() {
     }, []);
 
   return (
-    <div className={`w-full ${showNavBar ? (isSearchOpen ? 'min-h-[185px]' : 'h-[70px]') : 'h-[70px]'} bg-[#E2E8F0]`}>
+    <div className="w-full h-[70px] bg-[#E2E8F0]">
         <div className='w-full h-[70px] fixed top-0 left-0 z-40 shadow-md flex justify-between items-center px-5 md:px-8 bg-gray-300'>
             {/* Navbar */}
-            <div className="w-full flex justify-between items-center px-5 md:px-8 h-[70px]">
+            <div className="w-full flex justify-between items-center px-1 md:px-8 h-[70px]">
                 
                 {/* Logo + Tulisan */}
                 
-                <Link to="/" className="flex items-center gap-3">
+                <Link to="/" className="flex items-center">
                     <img src={Kambingg} className='w-[50px] h-[50px] text-gray-300' />
                     <h1 className="text-xl font-semibold text-gray-600">Master Kambing</h1>
                 </Link>
@@ -167,7 +177,12 @@ function Nav() {
           <button
             type="button"
             className="md:hidden fixed bottom-4 right-4 z-40 p-4 rounded-full shadow-xl bg-gray-800 text-white hover:bg-gray-700"
-            onClick={() => setIsSearchOpen(prev => !prev)}
+            onClick={() => {
+              // Hanya toggle untuk mobile
+              if (window.innerWidth < 768) {
+                setIsSearchOpen(prev => !prev);
+              }
+            }}
             aria-label="Toggle search"
           >
             <FiSearch className="w-6 h-6" />
@@ -225,11 +240,27 @@ function Nav() {
                     {showNavBar && (
                       <button
                         type="button"
-                        onClick={() => setIsSearchOpen(prev => !prev)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            // Di desktop, toggle search
+                            if (window.innerWidth >= 768) {
+                                setIsSearchOpen(prev => !prev);
+                                // Fokus ke input search saat dibuka
+                                if (!isSearchOpen) {
+                                    setTimeout(() => {
+                                        const searchInput = document.querySelector('.search-input');
+                                        if (searchInput) searchInput.focus();
+                                    }, 100);
+                                }
+                            } else {
+                                // Di mobile, selalu buka search
+                                setIsSearchOpen(true);
+                            }
+                        }}
                         className="px-3 py-2 bg-white text-slate-700 rounded-lg hover:bg-gray-100 transition-colors shadow flex items-center gap-2"
-                        aria-label="Toggle search"
+                        aria-label={isSearchOpen ? 'Tutup pencarian' : 'Buka pencarian'}
                       >
-                        <FiSearch className="w-5 h-5" />{isSearchOpen ? '' : ''}
+                        <FiSearch className="w-5 h-5" />
                       </button>
                     )}
                     {/* Swap Login <-> Cart hanya di /kambing & /susu */}
@@ -279,50 +310,112 @@ function Nav() {
                 </div>
                 )}
                 
-                {/* Hamburger for mobile */}
-                <button
-                  type="button"
-                  className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-200 transition-colors"
-                  aria-label="Toggle navigation menu"
-                  aria-expanded={isMenuOpen}
-                  onClick={() => setIsMenuOpen(prev => !prev)}
-                >
-                  <svg className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {isMenuOpen ? (
-                      // Icon: X
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    ) : (
-                      // Icon: Hamburger
-                      <path strokeLinecap="round"  strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                    )}
-                  </svg>
-                </button>
+                {/* Mobile actions: hamburger dulu, baru user/keranjang */}
+                <div className="md:hidden flex items-center gap-3">
+                  {/* Hamburger menu - selalu di kiri */}
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-200 transition-colors"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded={isMenuOpen}
+                    onClick={() => setIsMenuOpen(prev => !prev)}
+                  >
+                    <svg className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      {isMenuOpen ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                      )}
+                    </svg>
+                  </button>
+                  
+                  {/* User/Keranjang - selalu di kanan */}
+                  {(location.pathname === '/kambing' || location.pathname === '/susu') ? (
+                    // Keranjang untuk halaman kambing/susu
+                    <button
+                      type="button"
+                      onClick={() => setShowCart(true)}
+                      className="relative p-2 text-gray-700 hover:bg-gray-200 rounded-full transition-colors"
+                      aria-label="Keranjang belanja"
+                    >
+                      <FaShoppingBasket className="w-5 h-5" />
+                      {items.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                          {items.length}
+                        </span>
+                      )}
+                    </button>
+                  ) : location.pathname === '/' ? (
+                    // User untuk halaman home
+                    <div className="relative" ref={userMenuRef}>
+                      {user ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setIsUserMenuOpen(p => !p)}
+                            className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-gray-300 hover:border-blue-500 transition-colors"
+                            aria-label="User menu"
+                          >
+                            {avatarUrl ? (
+                              <img src={avatarUrl} alt="User" className="w-full h-full object-cover" />
+                            ) : (
+                              <FiUser className="text-gray-700" size={20} />
+                            )}
+                          </button>
+                          {isUserMenuOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50">
+                              <Link to="/user" onClick={() => setIsUserMenuOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+                              <button onClick={() => { handleLogout(); setIsUserMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
+                              <button onClick={() => { if(window.confirm('Yakin ingin menghapus akun?')) { handleDeleteAccount(); } }} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Delete Account</button>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <Link to="/login" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors">
+                          Login
+                        </Link>
+                      )}
+                    </div>
+                  ) : null}
+
+                </div>
             </div>
         </div>
-        {showNavBar && (
-            <div className={`w-full flex items-center justify-center gap-3 md:gap-6 px-5 md:px-8 fixed top-[70px] left-0 right-0 z-30 transition-all duration-300 shadow-md bg-[#E2E8F0] ${isSearchOpen ? 'translate-y-0 opacity-100 py-2' : '-translate-y-full opacity-0 pointer-events-none'}`}> 
-                {/* Logo kiri - sembunyikan di mobile */}
-                <Link to="/about" className='hidden md:flex w-[60px] h-[60px] justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300'>
-                    <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' />
+        {/* Desktop Search Bar - Muncul saat tombol search ditekan */}
+        {isSearchOpen && (
+            <div 
+                ref={searchRef}
+                className="hidden md:flex w-full items-center justify-center gap-6 px-8 fixed top-[70px] left-0 right-0 z-30 shadow-md bg-[#E2E8F0] py-2 transition-all duration-300"
+            >
+                <Link to="/about" className='w-[60px] h-[60px] justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300 hidden md:flex'>
+                    <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' alt="Logo" />
                 </Link>
 
-                {/* Search */}
                 <form
-                    className='w-full md:w-[70%] h-[54px] md:h-[60px] flex items-center rounded-md bg-white shadow-xl px-4 md:px-5 border-3 border-transparent hover:border-gray-300'
-                    onSubmit={(e) => e.preventDefault()}
+                    className='w-[70%] h-[60px] flex items-center rounded-md bg-white shadow-xl px-5 border-3 border-transparent hover:border-gray-300 transition-all duration-300'
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        setIsSearchOpen(false);
+                    }}
                 >
                     <input
-                    type="text"
-                    placeholder='Cari item...'
-                    className='w-full outline-none text-[16px] md:text-[20px]'
-                    onChange={(e) => setInput(e.target.value)}
-                    value={input}
+                        type="text"
+                        placeholder='Cari item...'
+                        className='w-full outline-none text-[20px]'
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                setIsSearchOpen(false);
+                            }
+                        }}
+                        value={input}
+                        autoFocus
                     />
                 </form>
 
-                {/* Logo kanan - sembunyikan di mobile */}
-                <Link to="/about" className='hidden md:flex w-[60px] h-[60px] justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300'>
-                    <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' />
+                <Link to="/about" className='w-[60px] h-[60px] justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300 hidden md:flex'>
+                    <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' alt="Logo" />
                 </Link>
             </div>
         )}
@@ -375,60 +468,73 @@ function Nav() {
                   )}
                 </div>
               )}
-              
-              {/* Pencarian trigger di mobile, hanya di Kambing & Susu */}
-              {showNavBar && (
-                <button
-                  type="button"
-                  onClick={() => { setIsSearchOpen(prev => !prev); setIsMenuOpen(false); }}
-                  className="mt-2 px-4 py-3 bg-white text-slate-700 rounded-lg text-center border border-gray-300 flex items-center"
-                >
-                  <FiSearch className="w-5 h-5" />
-                  <span className="hidden sm:inline">{isSearchOpen ? '' : ''}</span>
-                </button>
-              )}
-              
-              {showNavBar3 && (
-                showNavBar ? (
-                  <button onClick={() => { setShowCart(true); setIsMenuOpen(false); }} className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-lg text-center flex items-center justify-center gap-2">
-                    <FaShoppingBasket className='w-5 h-5' />
-                    {items.length > 0 && (
-                      <span className='ml-2 bg-white text-gray-700 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center'>
-                        {items.length}
-                      </span>
-                    )}
-                  </button>
-                ) : (
-                  user ? (
-                    <div className="relative" ref={userMenuRef}>
-                      <button
-                        type="button"
-                        onClick={() => setIsUserMenuOpen(p => !p)}
-                        className="mt-2 px-3 py-2 bg-white rounded-full inline-flex items-center justify-center border border-gray-300 self-start"
-                      >
-                        {avatarUrl ? (
-                          <img src={avatarUrl} alt="User" className="w-8 h-8 rounded-full object-cover" />
-                        ) : (
-                          <FiUser className='w-6 h-6 text-gray-700' />
-                        )}
-                      </button>
-                      {isUserMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50">
-                          <Link to="/user" onClick={() => { setIsUserMenuOpen(false); setIsMenuOpen(false); }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
-                          <button onClick={() => { setIsMenuOpen(false); handleLogout(); }} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
-                          <button onClick={() => { setIsMenuOpen(false); handleDeleteAccount(); }} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Delete Account</button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)} className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-lg text-center">Login</Link>
-                  )
-                )
-              )}
             </div>
         </div>
-    </div>
-      )
+
+        {/* Sticky Search Button - Hanya untuk mobile di halaman kambing/susu */}
+        {showNavBar && (
+          <div className="md:hidden fixed bottom-4 left-4 z-40 flex flex-col items-start gap-2">
+            {/* Tombol toggle search */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Toggle search bar
+                if (window.innerWidth >= 768) {
+                  // Di desktop, langsung toggle
+                  setIsSearchOpen(prev => !prev);
+                } else {
+                  // Di mobile, biarkan tombol floating yang menangani
+                  if (!isSearchOpen) {
+                    setIsSearchOpen(true);
+                  }
+                }
+              }}
+              className="p-3 rounded-full shadow-xl bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+              aria-label={isSearchOpen ? 'Tutup pencarian' : 'Buka pencarian'}
+            >
+              <FiSearch className="w-5 h-5" />
+            </button>
+            
+            {/* Search Box */}
+            {isSearchOpen && (
+              <div 
+                ref={searchRef} 
+                className="w-[calc(100vw-2rem)] bg-white p-3 rounded-lg shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsSearchOpen(false);
+                  }} 
+                  className="w-full"
+                >
+                  <input
+                    type="text"
+                    placeholder='Cari item...'
+                    className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsSearchOpen(false);
+                      }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    value={input}
+                    autoFocus
+                  />
+                </form>
+              </div>
+            )}
+          </div>
+        )}
+
+  </div>
+);
 }
 
 export default Nav;

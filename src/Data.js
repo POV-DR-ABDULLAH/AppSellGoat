@@ -72,7 +72,7 @@ export const Goat = [
       food_name: "Kambing Potong",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: Kambing,  
       price: 35000,
     },
     {
