@@ -11,13 +11,13 @@ import { Categories } from '../Category';
 import { FiSearch } from 'react-icons/fi';
 import { FiUser } from 'react-icons/fi';
 import { supabase } from '../lib/supabaseClient';
+import CategoryTabs from './CategoryTabs';
 
 function Nav() {
     let { input, setInput, cate, setCate, showCart, setShowCart} = useContext(dataContext)
 
     let items = useSelector(state => state.cart)
 
-    const location = useLocation();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false); // mobile menu toggle
     const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false); // desktop dropdown near Login
@@ -25,15 +25,19 @@ function Nav() {
     const userMenuRef = useRef(null);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false); // accordion inside mobile menu
     const [isSearchOpen, setIsSearchOpen] = useState(false); // toggle for slide-down search on kambing & susu
-  const searchRef = useRef(null); // ref untuk menangani klik di luar
+    const [activeTab, setActiveTab] = useState('all'); // 'all', 'live', 'cooked'
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false); // toggle kategori di mobile
+    const searchRef = useRef(null); // ref untuk menangani klik di luar
     const [user, setUser] = useState(null);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const navigate = useNavigate();
 
-    // Cek apakah sedang di halaman Kambing atau Susu
-    const showNavBar = location.pathname === '/kambing' || location.pathname === '/susu';
-    const showNavBar3 = location.pathname === '/kambing' || location.pathname === '/susu' || location.pathname === '/';
+    // Cek halaman aktif
+    const isKambingPage = location.pathname === '/kambing';
+    const isSusuPage = location.pathname === '/susu';
+    const showNavBar = isKambingPage || isSusuPage;
+    const showNavBar3 = isKambingPage || isSusuPage || location.pathname === '/';
     const showNavBar2 = location.pathname === '/';
 
     useEffect(() => {
@@ -108,11 +112,18 @@ function Nav() {
             if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
                 setIsUserMenuOpen(false);
             }
-            // Hapus penutupan otomatis untuk search box di desktop
-            if (isSearchOpen && window.innerWidth < 768) {
-                if (searchRef.current && !searchRef.current.contains(e.target)) {
+            // Untuk desktop (lebar layar >= 768px), tutup search saat klik di luar
+            if (isSearchOpen && searchRef.current && !searchRef.current.contains(e.target)) {
+                // Tambahkan kelas animasi sebelum menutup
+                const searchBar = searchRef.current;
+                searchBar.classList.add('search-bar-hide');
+                
+                // Tunggu animasi selesai sebelum menyembunyikan elemen
+                setTimeout(() => {
                     setIsSearchOpen(false);
-                }
+                    // Hapus kelas animasi setelah selesai
+                    searchBar.classList.remove('search-bar-hide');
+                }, 300); // Sesuaikan dengan durasi animasi CSS
             }
         };
         
@@ -381,11 +392,27 @@ function Nav() {
                 </div>
             </div>
         </div>
+        {/* Category Tabs - Hanya muncul di halaman kambing */}
+        {isKambingPage && !isSearchOpen && (
+            <div className="hidden md:flex w-full py-2 justify-center fixed top-[70px] left-0 right-0 z-30 bg-white shadow-sm">
+                <div className="w-full max-w-7xl flex justify-center">
+                    <CategoryTabs 
+                        activeTab={activeTab} 
+                        onTabChange={setActiveTab}
+                        isSearchOpen={isSearchOpen}
+                    />
+                </div>
+            </div>
+        )}
+
         {/* Desktop Search Bar - Muncul saat tombol search ditekan */}
         {isSearchOpen && (
             <div 
                 ref={searchRef}
-                className="hidden md:flex w-full items-center justify-center gap-6 px-8 fixed top-[70px] left-0 right-0 z-30 shadow-md bg-[#E2E8F0] py-2 transition-all duration-300"
+                className="hidden md:flex w-full items-center justify-center gap-6 px-8 fixed top-[70px] left-0 right-0 z-30 shadow-md bg-[#E2E8F0] py-2 transition-all duration-300 transform translate-y-0 search-bar-animate"
+                style={{
+                    animation: 'slideDown 0.3s ease-out forwards'
+                }}
             >
                 <Link to="/about" className='w-[60px] h-[60px] justify-center items-center rounded-md bg-white shadow-xl border-3 border-transparent hover:border-gray-300 hidden md:flex'>
                     <img src={Goatt} className='w-[50px] h-[50px] text-gray-300' alt="Logo" />
@@ -428,8 +455,66 @@ function Nav() {
         />
 
         {/* Sliding panel */}
-        <div className={`md:hidden fixed top-[70px] left-0 right-0 z-30 bg-gray-100 border-t border-gray-200 shadow-lg transform transition-transform duration-300 ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-            <div className="p-4 flex flex-col gap-3">
+        <div className={`md:hidden fixed top-[70px] left-0 right-0 max-h-[80vh] z-30 bg-white border-t border-gray-200 shadow-lg transform transition-transform duration-300 overflow-y-auto ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className="p-3 flex flex-col gap-2">
+              {/* Kategori Dropdown untuk Mobile - Hanya di halaman kambing */}
+              {isKambingPage && (
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                  <button 
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-slate-700 font-medium text-sm"
+                    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                      <span>Kategori Produk</span>
+                    </div>
+                    <svg 
+                      className={`w-4 h-4 text-gray-500 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`}
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {isCategoryOpen && (
+                    <div className="border-t border-gray-100">
+                      {[
+                        { id: 'all', label: 'Semua' },
+                        { id: 'live', label: 'Kambing Hidup' },
+                        { id: 'cooked', label: 'Kambing Masak' },
+                        { id: 'cut', label: 'Potongan' }
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => {
+                            setActiveTab(tab.id);
+                            setIsMenuOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2 ${
+                            activeTab === tab.id 
+                              ? 'bg-blue-50 text-blue-600 font-medium' 
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className="w-4 flex-shrink-0">
+                            {activeTab === tab.id && (
+                              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="truncate">{tab.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {showNavBar3 && (
                 <div className="grid grid-cols-3 gap-1">
                   {Categories.map((item) => (
@@ -536,5 +621,36 @@ function Nav() {
   </div>
 );
 }
+
+// Tambahkan style untuk animasi
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .search-bar-hide {
+    animation: slideUp 0.3s ease-out forwards !important;
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
 
 export default Nav;
