@@ -108,50 +108,14 @@ function Kambing() {
 
   return (
     <div className='bg-slate-200 w-full min-h-screen'>
-      {/* Tabs untuk filter */}
-      <div className="w-full bg-white shadow-sm py-2 px-4 sticky top-0 z-10">
-        <div className="flex space-x-4 overflow-x-auto">
-          <button
-            onClick={() => handleTabChange('all')}
-            className={`px-4 py-2 rounded-lg whitespace-nowrap ${
-              activeTab === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-          >
-            Semua
-          </button>
-          <button
-            onClick={() => handleTabChange('live')}
-            className={`px-4 py-2 rounded-lg whitespace-nowrap ${
-              activeTab === 'live' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-          >
-            Kambing Hidup
-          </button>
-          <button
-            onClick={() => handleTabChange('cooked')}
-            className={`px-4 py-2 rounded-lg whitespace-nowrap ${
-              activeTab === 'cooked' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-          >
-            Kambing Masak
-          </button>
-          <button
-            onClick={() => handleTabChange('cut')}
-            className={`px-4 py-2 rounded-lg whitespace-nowrap ${
-              activeTab === 'cut' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-          >
-            Potongan
-          </button>
-        </div>
-      </div>
+      
 
       {/* Daftar Produk */}
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
           <LoadingMessage />
         ) : filteredList.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {filteredList.map((item) => (
               <Card 
                 key={`goat-${item.id}`}
