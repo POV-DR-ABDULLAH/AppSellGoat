@@ -24,18 +24,6 @@ const CategoryTabs = ({ activeTab, onTabChange, isSearchOpen }) => {
     }
   }, [isSearchOpen]);
 
-  const tabs = [
-    { id: 'all', label: 'Semua', icon: <FaList className="w-4 h-4" /> },
-    { id: 'live', label: 'Kambing', icon: <FaHorseHead className="w-4 h-4" /> },
-    { id: 'cooked', label: 'Masak', icon: <FaUtensils className="w-4 h-4" /> },
-    { id: 'cut', label: 'Potongan', icon: <FaUtensils className="w-4 h-4" /> },
-  ];
-
-  const getActiveLabel = () => {
-    const tab = tabs.find(t => t.id === activeTab);
-    return tab ? tab.icon : tabs[0].icon;
-  };
-
   // Close dropdown when search is opened
   useEffect(() => {
     if (isSearchOpen) {
@@ -63,19 +51,19 @@ const CategoryTabs = ({ activeTab, onTabChange, isSearchOpen }) => {
         }`}
         style={{ minWidth: '200px' }}
       >
-        {tabs.map((tab) => (
+        {categories.map((category) => (
           <button
-            key={tab.id}
+            key={category.id}
             onClick={() => {
-              onTabChange(tab.id);
+              onTabChange(category.id);
               setIsOpen(false);
             }}
             className={`w-full px-6 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors ${
-              activeTab === tab.id ? 'text-blue-600' : 'text-gray-700'
+              activeTab === category.id ? 'text-blue-600' : 'text-gray-700'
             }`}
           >
-            <span className={`${activeTab === tab.id ? 'text-blue-500' : 'text-gray-400'}`}>
-              {tab.icon}
+            <span className={`${activeTab === category.id ? 'text-blue-500' : 'text-gray-400'}`}>
+              {category.icon}
             </span>
             <span className="text-sm font-medium">
               {tab.label}

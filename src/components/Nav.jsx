@@ -11,7 +11,8 @@ import { Categories } from '../Category';
 import { FiSearch } from 'react-icons/fi';
 import { FiUser } from 'react-icons/fi';
 import { supabase } from '../lib/supabaseClient';
-import CategoryTabs from './CategoryTabs';
+// import CategoryTabs from './CategoryTabs';
+import { VscArrowSwap } from "react-icons/vsc";
 
 function Nav() {
     let { input, setInput, cate, setCate, showCart, setShowCart} = useContext(dataContext)
@@ -25,13 +26,26 @@ function Nav() {
     const userMenuRef = useRef(null);
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false); // accordion inside mobile menu
     const [isSearchOpen, setIsSearchOpen] = useState(false); // toggle for slide-down search on kambing & susu
-    const [activeTab, setActiveTab] = useState('all'); // 'all', 'live', 'cooked'
     const [isCategoryOpen, setIsCategoryOpen] = useState(false); // toggle kategori di mobile
     const searchRef = useRef(null); // ref untuk menangani klik di luar
     const [user, setUser] = useState(null);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const location = useLocation();
     const navigate = useNavigate();
+    const searchParams = new URLSearchParams(location.search);
+    const [activeCategory, setActiveCategory] = useState('kambingHidup');
+
+    // Update active category when URL changes
+    useEffect(() => {
+        const categoryFromUrl = searchParams.get('category');
+        if (categoryFromUrl === 'kambingHidup' || categoryFromUrl === 'kambingMasak') {
+            setActiveCategory(categoryFromUrl);
+        } else if (location.pathname === '/kambing') {
+            // Set default category if none is selected and we're on the kambing page
+            navigate('?category=kambingHidup', { replace: true });
+        }
+    }, [location.search, location.pathname, navigate, searchParams]);
 
     // Cek halaman aktif
     const isKambingPage = location.pathname === '/kambing';
@@ -392,17 +406,34 @@ function Nav() {
                 </div>
             </div>
         </div>
-        {/* Category Tabs - Hanya muncul di halaman kambing */}
+        {/* Category Switcher - Visible on both mobile and desktop */}
         {isKambingPage && !isSearchOpen && (
-            <div className="hidden md:flex w-full py-2 justify-center fixed top-[70px] left-0 right-0 z-30 bg-white shadow-sm">
-                <div className="w-full max-w-7xl flex justify-center">
-                    <CategoryTabs 
-                        activeTab={activeTab} 
-                        onTabChange={setActiveTab}
-                        isSearchOpen={isSearchOpen}
-                    />
-                </div>
+          <div className="w-full justify-center fixed top-[70px] z-30 bg-white shadow-sm py-3">
+            <div className="flex items-center justify-center gap-4">
+              <button
+                onClick={() => navigate(`${location.pathname}?category=kambingHidup`)}
+                className={`font-medium text-sm md:text-base ${activeCategory === 'kambingHidup' ? 'text-blue-600' : 'text-gray-600'}`}
+              >
+                Kambing Hidup
+              </button>
+              <button 
+                onClick={() => {
+                  const newCategory = activeCategory === 'kambingHidup' ? 'kambingMasak' : 'kambingHidup';
+                  navigate(`${location.pathname}?category=${newCategory}`);
+                }}
+                className="p-1.5 md:p-2 rounded-full border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                aria-label="Ganti kategori"
+              >
+                <VscArrowSwap className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
+              </button>
+              <button
+                onClick={() => navigate(`${location.pathname}?category=kambingMasak`)}
+                className={`font-medium text-sm md:text-base ${activeCategory === 'kambingMasak' ? 'text-blue-600' : 'text-gray-600'}`}
+              >
+                Kambing Masak
+              </button>
             </div>
+          </div>
         )}
 
         {/* Desktop Search Bar - Muncul saat tombol search ditekan */}
@@ -457,63 +488,7 @@ function Nav() {
         {/* Sliding panel */}
         <div className={`md:hidden fixed top-[70px] left-0 right-0 max-h-[80vh] z-30 bg-white border-t border-gray-200 shadow-lg transform transition-transform duration-300 overflow-y-auto ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="p-3 flex flex-col gap-2">
-              {/* Kategori Dropdown untuk Mobile - Hanya di halaman kambing */}
-              {isKambingPage && (
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                  <button 
-                    type="button"
-                    className="w-full flex items-center justify-between px-3 py-2.5 text-slate-700 font-medium text-sm"
-                    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                      <span>Kategori Produk</span>
-                    </div>
-                    <svg 
-                      className={`w-4 h-4 text-gray-500 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`}
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  {isCategoryOpen && (
-                    <div className="border-t border-gray-100">
-                      {[
-                        { id: 'all', label: 'Semua' },
-                        { id: 'live', label: 'Kambing Hidup' },
-                        { id: 'cooked', label: 'Kambing Masak' },
-                        { id: 'cut', label: 'Potongan' }
-                      ].map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => {
-                            setActiveTab(tab.id);
-                            setIsMenuOpen(false);
-                          }}
-                          className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2 ${
-                            activeTab === tab.id 
-                              ? 'bg-blue-50 text-blue-600 font-medium' 
-                              : 'text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
-                          <span className="w-4 flex-shrink-0">
-                            {activeTab === tab.id && (
-                              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </span>
-                          <span className="truncate">{tab.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Removed duplicate category switcher from hamburger menu */}
 
               {showNavBar3 && (
                 <div className="grid grid-cols-3 gap-1">

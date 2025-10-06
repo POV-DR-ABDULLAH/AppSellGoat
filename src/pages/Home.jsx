@@ -6,6 +6,26 @@ import GoatMilkImage from '../assets/GoatMilk.jpg';
 import Footer from '../components/Footer';
 
 const Home = () => {
+  const handlePesan = (e) => {
+          e.preventDefault();
+
+          // Build order details message
+          let message = "Assalamu'alaikum, saya ingin tanya tentang aqiqah / susu.";
+          
+          const encodedMessage = encodeURIComponent(message);
+          
+          // Check if it's a mobile device
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          
+          if (isMobile) {
+              // For mobile devices
+              window.location.href = `whatsapp://send?phone=6285241180699&text=${encodedMessage}`;
+          } else {
+              // For desktop
+              window.open(`https://wa.me/6285241180699?text=${encodedMessage}`, '_blank');
+          }
+      };
+
   return (
     <div className='bg-gray-50'>
       {/* Hero Section */}
@@ -16,27 +36,27 @@ const Home = () => {
               <img 
                 src={GoatImage} 
                 alt='Kambing Sehat' 
-                className='mx-auto mb-8 w-[200px] h-[200px] object-cover rounded-full border-4 border-white shadow-lg'
+                className='mx-auto mb-8 w-[200px] h-[200px] object-cover  '
               />
               <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 leading-tight'>
                 Jual Kambing
                 Aqiqah <br /> & Susu Segar <br />
-                di <span className='text-green-600'>Aqiqah Mas Ali</span>
+                di <span className='text-gray-600 font-caveat'>Aqiqah Mas Ali</span>
               </h1>
-              <p className='text-xl text-gray-600 mb-10 max-w-2xl mx-auto'>
+              {/* <p className='text-xl text-gray-600 mb-10 max-w-2xl mx-auto'>
                 Layanan aqiqah, penjualan kambing & susu murni segar yang sehat, higienis, 
                 dan 100% halal terpercaya. oleh <span className='font-semibold text-gray-800'>Mas Ali</span>
-              </p>
+              </p> */}
               <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
                 <Link 
                   to='/kambing' 
-                  className='w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
+                  className='w-full sm:w-auto bg-gray-400 hover:bg-gray-500 text-white font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
                 >
                   Lihat Kambing
                 </Link>
                 <Link 
                   to='/susu' 
-                  className='w-full sm:w-auto bg-white hover:bg-gray-50 text-green-600 border-2 border-green-600 font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
+                  className='w-full sm:w-auto bg-gray hover:bg-gray-50 text-gray-600 border-2 border-gray-600 font-semibold py-4 px-8 rounded-lg text-center transition duration-300 transform hover:scale-105'
                 >
                   Pesan Susu Segar
                 </Link>
@@ -128,7 +148,7 @@ const Home = () => {
                 to='/susu' 
                 className='inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105'
               >
-                Pesan Sekarang
+                Pesan Sekaran
               </Link>
             </div>
           </div>
@@ -193,17 +213,15 @@ const Home = () => {
       </section>
       {/* Floating Contacts */}
       <div className="fixed right-6 bottom-6 z-[10] flex flex-col items-end gap-3">
-        <a
-          href="https://wa.me/6285241180699?text=Assalamu'alaikum%2C%20saya%20ingin%20tanya%20tentang%20aqiqah%20%2F%20susu."
-          target="_blank"
-          rel="noreferrer"
+        <button
+          onClick={handlePesan}
           className="group flex items-center gap-2 px-4 py-3 rounded-full shadow-xl bg-green-500 text-white hover:bg-green-600 transition-colors"
           title="Hubungi WhatsApp"
           aria-label="Hubungi WhatsApp"
         >
           <span className="text-lg">💬</span>
           <span className="hidden sm:block font-medium">WhatsApp</span>
-        </a>
+        </button>
         <Link
           to="/about"
           className="group flex items-center gap-2 px-4 py-3 rounded-full shadow-xl bg-gray-800 text-white hover:bg-gray-700 transition-colors"

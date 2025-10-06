@@ -1,14 +1,15 @@
-import Kambing from "./assets/dummy.jpg"
+import KambingImg from "./assets/dummy.jpg"
 import Susu from "./assets/Milk.png"
 
 // Goat.js
-export const Goat = [
+export const Goat = {
+  kambingMasak: [
     {
       id: 1,
       food_name: "Kambing Guling",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: KambingImg,
       price: 150000,
     },
     {
@@ -16,7 +17,7 @@ export const Goat = [
       food_name: "Sate Kambing",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: KambingImg,
       price: 40000,
     },
     {
@@ -24,7 +25,7 @@ export const Goat = [
       food_name: "Gulai Kambing",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: KambingImg,
       price: 35000,
     },
     {
@@ -32,58 +33,55 @@ export const Goat = [
       food_name: "Kambing Tongseng",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: KambingImg,
       price: 35000,
     },
     {
       id: 5,
-      food_name: "Kambing Kecil",
-      food_category: "goat_main",
-      food_quantity: 1,
-      food_img: Kambing,
-      price: 150000,
-    },
-    {
-      id: 6,
-      food_name: "Kambing",
-      food_category: "goat_main",
-      food_quantity: 1,
-      food_img: Kambing,
-      price: 40000,
-    },
-    {
-      id: 7,
-      food_name: "Kambing Soto",
-      food_category: "goat_main",
-      food_quantity: 1,
-      food_img: Kambing,
-      price: 35000,
-    },
-    {
-      id: 8,
       food_name: "Kambing Kari",
       food_category: "goat_main",
       food_quantity: 1,
-      food_img: Kambing,
+      food_img: KambingImg,
       price: 35000,
+    },
+    {
+      id: 6,
+      food_name: "Kambing Soto",
+      food_category: "goat_main",
+      food_quantity: 1,
+      food_img: KambingImg,
+      price: 35000,
+    },
+  ],
+
+  kambingHidup: [
+    {
+      id: 7,
+      food_name: "Kambing Hidup",
+      food_category: "goat_live",
+      food_quantity: 1,
+      food_img: KambingImg,
+      price: 3500000,
+    },
+    {
+      id: 8,
+      food_name: "Kambing Potong",
+      food_category: "goat_live",
+      food_quantity: 1,
+      food_img: KambingImg,
+      price: 2500000,
     },
     {
       id: 9,
-      food_name: "Kambing Potong",
-      food_category: "goat_main",
+      food_name: "Kambing Kecil",
+      food_category: "goat_live",
       food_quantity: 1,
-      food_img: Kambing,  
-      price: 35000,
+      food_img: KambingImg,
+      price: 1500000,
     },
-    {
-      id: 10,
-      food_name: "Kambing Hidup",
-      food_category: "goat_main",
-      food_quantity: 1,
-      food_img: Kambing,
-      price: 35000,
-    },
-  ];
+  ],
+};
+
   
   // Milk.js
 export const Milk = [

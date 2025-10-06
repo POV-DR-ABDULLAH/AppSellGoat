@@ -47,6 +47,26 @@ function Susu() {
         // TODO: arahkan ke halaman checkout jika sudah tersedia
     }
 
+    const handlePesan2 = (e) => {
+        e.preventDefault();
+
+        // Build order details message
+        let message = "Assalamu'alaikum, saya ingin tanya tentang aqiqah / susu.";
+        
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Check if it's a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // For mobile devices
+            window.location.href = `whatsapp://send?phone=6285241180699&text=${encodedMessage}`;
+        } else {
+            // For desktop
+            window.open(`https://wa.me/6285241180699?text=${encodedMessage}`, '_blank');
+        }
+    };
+
   return (
     <div className='bg-slate-200 w-full min-h-screen pt-[80px]'>
         <div className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5 justify-items-center pt-2 pb-8">
@@ -107,9 +127,7 @@ function Susu() {
         {/* Floating Contacts */}
         <div className="fixed right-6 bottom-6 z-[100] flex flex-col items-end gap-3">
           <a
-            href="https://wa.me/6285241180699?text=Assalamu'alaikum%2C%20saya%20ingin%20tanya%20tentang%20aqiqah%20%2F%20susu."
-            target="_blank"
-            rel="noreferrer"
+            onClick={handlePesan2}
             className="group flex items-center gap-2 px-4 py-3 rounded-full shadow-xl bg-green-500 text-white hover:bg-green-600 transition-colors"
             title="Hubungi WhatsApp"
             aria-label="Hubungi WhatsApp"
