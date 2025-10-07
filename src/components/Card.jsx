@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from "react-redux";
 import { AddItem } from "../redux/cartSlice";
 import { toast } from 'react-toastify';
 import { formatCurrencyIDR } from "../utils/format";
-import { FaRegCommentDots } from "react-icons/fa";
+import { FaRegCommentDots, FaTimes } from "react-icons/fa";
 
 function Card({ name, img, id, price }) {
+    const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
 
     const handleWhatsAppClick = (e) => {
@@ -27,9 +28,30 @@ function Card({ name, img, id, price }) {
 
     return (
         <div className="w-full bg-white p-3 rounded-lg flex flex-col gap-3 shadow-lg hover:border-2 border-blue-300">
-            <div className="w-full overflow-hidden rounded-lg aspect-[4/3]">
-                <img src={img} alt={name} className="w-full h-full object-cover" />
+            <div className="w-full overflow-hidden rounded-lg aspect-[4/3] cursor-pointer" onClick={() => setShowModal(true)}>
+                <img src={img} alt={name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
             </div>
+            
+            {/* Image Modal */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
+                    <div className="relative max-w-4xl w-full max-h-[90vh]" onClick={e => e.stopPropagation()}>
+                        <button 
+                            className="absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
+                            onClick={() => setShowModal(false)}
+                        >
+                            <FaTimes />
+                        </button>
+                        <div className="bg-white rounded-lg overflow-hidden">
+                            <img 
+                                src={img} 
+                                alt={name} 
+                                className="w-full h-full max-h-[80vh] object-contain"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="text-xl font-semibold">
                 {name}
