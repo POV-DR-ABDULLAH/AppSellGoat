@@ -22,7 +22,7 @@ function Card({ name, img, id, price }) {
             window.location.href = `whatsapp://send?phone=6285241180699&text=${encodedMessage}`;
         } else {
             // For desktop
-            window.open(`https://web.whatsapp.com/send?phone=6285241180699&text=${encodedMessage}`, '_blank');
+            window.open(`https://wa.me/6285241180699?text=${encodedMessage}`, '_blank');
         }
     };
 
